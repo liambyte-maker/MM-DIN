@@ -110,7 +110,6 @@ DeepSet思想：把相似度看成一个集合，统计成20个桶的分布特�
 
 第二阶段： 把训练好的DIN Hidden Layer 迁移到正式推荐模型，实习多模态参数提前适配CTR任务，避免ID Dpminance。 这样就实现了多模态embedding提前训练多个epoch的目的
 
-最终架构
 
 
 
