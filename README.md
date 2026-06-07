@@ -53,6 +53,9 @@ to improve representation quality for cold-start items.
 
 ## base Model
 
+<img width="1529" height="1132" alt="image" src="https://github.com/user-attachments/assets/c86cbaa5-9383-41f0-9c72-42f253edc6af" />
+
+
 
 ### Approach 1: Cluster Attention
 
@@ -96,6 +99,9 @@ To improve robustness, DeepSets is introduced to model similarity distributions 
 ---
 
 ### Approach 3: Two-Stage Multimodal Training
+
+<img width="1032" height="777" alt="image" src="https://github.com/user-attachments/assets/8d9128ac-3af4-46ab-8d9c-242418dc35f0" />
+
 
 Directly combining:
 
