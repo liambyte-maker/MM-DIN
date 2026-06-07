@@ -85,12 +85,16 @@ S=[Sim₁,...,Sim₅₀]
 ## 问题发现： ID Dominancee
 方案二效果比方案三好
 
-##为什么直接使I用多模态Embedding效果反而不好？
+## 为什么直接使用多模态Embedding效果反而不好？
 
-原因： ID 特征学习速度远快于多模态特征
-模型会优先拟合：  Item ID
+难点1： ID 特征学习速度远快于多模态特征
+模型会优先SZ拟合：  Item ID
 
 而忽略 Image Feature, Text Feature，最终导致 ID Dominace
+
+难点2：
+需要解决ID 表征（One -Epoch收敛)和多模态表征（Multi-Epoch收敛)的联合训练时因收敛速度不同，共同优化效果次优的问题
+
 
 
 ## 优化1： DeepSet Similarity Distribution
@@ -111,10 +115,51 @@ DeepSet思想：把相似度看成一个集合，统计成20个桶的分布特�
 第二阶段： 把训练好的DIN Hidden Layer 迁移到正式推荐模型，实习多模态参数提前适配CTR任务，避免ID Dpminance。 这样就实现了多模态embedding提前训练多个epoch的目的
 
 
+# 项目贡献（Contributions）
+## Contribution 1
 
+完成基于 DIN 的 CTR 精排框架搭建。
 
+## Contribution 2
 
+提出 Cluster Attention 方法，用于建模类别级用户兴趣。
 
+## Contribution 3
 
+提出 Similarity Distribution Modeling 方法，利用多模态语义信息增强冷启动推荐能力。
 
+## Contribution 4
 
+发现推荐系统中的 ID Dominance 现象：
+
+ID特征学习速度>多模态特征学习速度
+
+导致联合训练效果受限。
+
+##Contribution 5
+
+提出两阶段多模态训练框架（Two-Stage Training），缓解 ID 与多模态特征收敛速度不匹配的问题。
+
+项目收获（Lessons Learned）
+
+通过本项目，我对以下问题有了更加深入的理解：
+
+DIN 与工业 CTR 模型结构；
+* 冷启动推荐问题；
+* 多模态表示学习；
+* Attention 在推荐系统中的应用；
+* Cosine Similarity 建模方法；
+* DeepSet 集合表示学习；
+I* D Dominance 现象及其成因；
+* 多模态预训练与迁移学习。
+  
+## Future Work
+
+未来计划进一步探索：
+
+* SASRec 序列推荐模型；
+* 多模态序列推荐；
+* Confidence-Aware Fusion；
+* CLIP 增强推荐；
+* LLM Recommendation；
+* Agent Recommendation Systems。
