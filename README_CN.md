@@ -136,7 +136,7 @@ ID特征学习速度>多模态特征学习速度
 
 导致联合训练效果受限。
 
-##Contribution 5
+## Contribution 5
 
 提出两阶段多模态训练框架（Two-Stage Training），缓解 ID 与多模态特征收敛速度不匹配的问题。
 
