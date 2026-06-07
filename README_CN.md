@@ -69,10 +69,7 @@ Target Item DMT Embedding
 History Item DMT Embedding
 
 之间的余弦相似度：
-
-Sim_i =
-(d_t^T d_i)
-/(||d_t|| ||d_i||)
+$\text{Sim}_i = \frac{d_t^{T} d_i}{\|d_t\| \cdot \|d_i\|}$
 
 得到：
 
@@ -84,6 +81,37 @@ S=[Sim₁,...,Sim₅₀]
 
 直接把多模态Embedding 当DIN 输入
 新增DMT DIN 分支，最后拼接
+
+## 问题发现： ID Dominancee
+方案二效果比方案三好
+
+##为什么直接使I用多模态Embedding效果反而不好？
+
+原因： ID 特征学习速度远快于多模态特征
+模型会优先拟合：  Item ID
+
+而忽略 Image Feature, Text Feature，最终导致 ID Dominace
+
+
+## 优化1： DeepSet Similarity Distribution
+
+方案二直接拼接50维相似度序列，存在顺序敏感，维度过高，泛化不足的问题
+
+DeepSet思想：把相似度看成一个集合，统计成20个桶的分布特征，从而消除顺序影响，降低维度，增强稳定性，本质是在学习用户历史与target的整体相似度分布，而不是某个位置上具体的相似度
+
+## 优化2 Two-Stage Multimodal Training
+
+解决ID学的太快，多模态学的太慢
+
+第一阶段： 单独训练Multimodal DIN
+
+<img width="1032" height="777" alt="image" src="https://github.com/user-attachments/assets/b691e829-e789-47df-86d9-f346177472dd" />
+
+
+第二阶段： 把训练好的DIN Hidden Layer 迁移到正式推荐模型，实习多模态参数提前适配CTR任务，避免ID Dpminance。 这样就实现了多模态embedding提前训练多个epoch的目的
+
+最终架构
+
 
 
 
