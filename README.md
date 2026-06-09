@@ -98,10 +98,10 @@ To improve robustness, DeepSets is introduced to model similarity distributions 
 
 ---
 
-### Approach 3: Two-Stage Multimodal Training
+
+## Approach 3: Two-Stage Multimodal Training
 
 <img width="1032" height="777" alt="image" src="https://github.com/user-attachments/assets/8d9128ac-3af4-46ab-8d9c-242418dc35f0" />
-
 
 Directly combining:
 
@@ -111,21 +111,24 @@ ID Embedding
 Multi-Modal Embedding
 ```
 
-often causes a phenomenon called:
+often introduces an optimization challenge referred to as:
 
 ```text
 ID Dominance
 ```
 
-where the model relies heavily on ID features while ignoring multimodal representations.
+where ID embeddings receive stronger and more frequent supervision signals from user interactions, causing the model to rely heavily on ID features while under-utilizing multimodal representations.
 
-To mitigate this issue:
+This phenomenon is particularly severe in recommendation systems because popular items receive abundant interaction data, allowing their ID embeddings to converge rapidly, while multimodal representations typically require more training iterations to align with CTR/CVR objectives.
+
+To mitigate this issue, a Two-Stage Multimodal Training strategy is proposed:
 
 1. Pre-train multimodal branches using CTR/CVR objectives.
-2. Freeze multimodal encoders.
-3. Jointly train with the main DIN model.
+2. Learn task-aligned image and text representations.
+3. Freeze or partially freeze multimodal encoders.
+4. Jointly optimize multimodal features together with the DIN backbone.
 
-This allows multimodal representations to better align with ranking tasks before integration.
+This strategy aims to reduce optimization imbalance and improve multimodal feature utilization for cold-start recommendation scenarios.
 
 ---
 
@@ -133,11 +136,13 @@ This allows multimodal representations to better align with ranking tasks before
 
 ### Finding 1: Cold-Start Limitation of ID Embeddings
 
-Popular items receive sufficient updates, while cold-start items often suffer from under-trained embeddings.
+Item ID embeddings are learned entirely from user interaction signals.
+
+Popular items receive sufficient gradient updates and quickly obtain meaningful representations, while cold-start items often suffer from sparse interactions and poorly trained embeddings.
 
 ### Finding 2: Raw Multimodal Embeddings Do Not Always Help
 
-Experimental results showed:
+Experimental observations suggest that directly introducing multimodal embeddings does not always improve recommendation quality.
 
 ```text
 Cosine Similarity Features
@@ -145,36 +150,38 @@ Cosine Similarity Features
 Raw Multi-Modal Embeddings
 ```
 
-indicating that representation utilization is often more important than representation complexity.
+This indicates that representation utilization is often more important than representation complexity.
 
-### Finding 3: ID Dominance
+### Finding 3: ID Dominance Creates Optimization Imbalance
 
-ID features learn significantly faster than multimodal features:
+ID embeddings generally learn much faster than multimodal representations:
 
 ```text
 ID Features
-→ Near convergence in one epoch
+→ Rapidly optimized through dense interaction signals
 
 Multi-Modal Features
-→ Require multiple epochs
+→ Require more iterations to adapt to ranking objectives
 ```
 
-This creates optimization imbalance during joint training.
+This optimization imbalance may cause the model to over-rely on ID embeddings during joint training.
 
 ### Finding 4: Similarity Modeling Improves Stability
 
-Transforming multimodal representations into similarity features reduces optimization difficulty and improves cold-start robustness.
+Transforming multimodal representations into similarity signals provides a more stable way to identify relevant historical behaviors.
+
+Compared with direct multimodal fusion, similarity-based modeling reduces optimization difficulty and improves robustness for cold-start and long-tail items.
 
 ---
 
-
 ## Contributions
 
-* Built a DIN-based multimodal CTR ranking framework.
-* Proposed Cluster Attention for category-level interest modeling.
-* Proposed Similarity Distribution Modeling with DeepSets.
+* Built a DIN-based multimodal CTR/CVR ranking framework.
+* Proposed Cluster-Aware Attention for category-level interest modeling.
+* Proposed Similarity-Augmented Attention using multimodal similarity signals.
 * Identified the ID Dominance phenomenon in multimodal recommendation systems.
-* Designed a Two-Stage Multimodal Training framework for cold-start recommendation.
+* Proposed a Two-Stage Multimodal Training strategy to improve multimodal feature utilization under cold-start settings.
+
 
 ---
 
@@ -207,6 +214,9 @@ Transforming multimodal representations into similarity features reduces optimiz
 **Jinming Liu**
 
 ### Research Interests
+
+
+
 
 * Recommendation Systems
 * CTR Prediction
